@@ -132,14 +132,6 @@ Types:
 
 ---
 
-## Rules
-
-* All work must be pushed to GitHub daily
-* Use clear commit messages
-* No last-day submissions
-
----
-
 ## Immediate Tasks
 
 ### Ayesha
@@ -161,12 +153,6 @@ Types:
 
 ---
 
-## Meeting Plan
-
-* Daily progress updates required from each member
-
----
-
 ## Definition of Done (Milestone 1)
 
 * Cuckoo filter working on single node
@@ -176,12 +162,5 @@ Types:
 
 ---
 
-## Future Work
-
-* Distributed cuckoo filter
-* Partitioning across nodes
-* Performance optimization
-
----
 
 
