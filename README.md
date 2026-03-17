@@ -1,30 +1,188 @@
-# Distributed-Cuckoo-Filter-with-ESP32-WebSocket-Architecture
-This project focuses on the design and implementation of a distributed Cuckoo Filter across multiple ESP32 devices. A Cuckoo
-Filter is a type of probabilistic data structure which allows efficient membership testing with a
-low memory footprint. Unlike traditional hash tables, Cuckoo Filters are designed to
-support insertions, deletions, and approximate membership queries while minimizing false
-positives.
+# Distributed Cuckoo Filter System
 
-In a distributed setting (multiple ESP32s), each ESP32 node maintains a local partition of the
-filter, which allows the system to handle larger datasets than a single device could accommodate.
-The nodes communicate with a “master node”, which coordinates operations such as insertion,
-deletion, and lookup across the network. Communication can be implemented using ESP-NOW
-(low-latency peer-to-peer protocol for ESP32 devices) or WebSocket-based messaging (real-time
-communication over Wi-Fi). For now, we are choosing to stick with WebSocket-based
-communication using an existing WebSocket library.
+## 📌 Project Overview
 
-The main objectives of this project are:
+This project implements a distributed cuckoo filter system using ESP32 nodes and WebSocket communication. The system consists of a master node coordinating multiple slave nodes, each maintaining a portion of the cuckoo filter.
 
-• Distributed data structure: Partition the filter data across multiple devices to effectively
-utilize memory and processing capabilities of each node.
+---
 
-• Message passing & coordination: Implement a master-slave architecture that ensures all
-operations are correctly routed to the responsible nodes, maintaining consistency, and
-minimizing latency.
+## 🎯 Milestone 1 Goal
 
-• Fault tolerance & replication: Incorporate replication mechanisms to handle node
-failures, network partitions, or message loss, while ensuring consistency across nodes.
+Implement a **single-node cuckoo filter** and establish **basic WebSocket communication** between nodes.
 
-• Performance evaluation: Measure and analyze key metrics such as false positive rates,
-operation latency, and the overall scalability of the distributed filter when nodes are
-added or removed.
+---
+
+## 👥 Team Responsibilities
+
+### Ayesha (Team Lead)
+
+* Master node design
+* Integration of all components
+* Test setup and documentation
+* Performance evaluation (false positives, logs)
+
+### Hamza
+
+* Cuckoo Filter implementation in C++
+* Insert, delete, lookup operations
+* Hashing and kick-out logic
+
+### Waiz
+
+* ESP32 hardware setup
+* WiFi connectivity and testing
+* Slave node support
+
+### Kabeer
+
+* WebSocket communication setup
+* Message sending/receiving
+* Protocol/message format design
+
+---
+
+## 🗂️ Repository Structure
+
+```
+/cuckoo-filter-project
+│
+├── README.md
+├── docs/
+│   └── milestone1.md
+│
+├── src/
+│   ├── cuckoo_filter/
+│   ├── websocket/
+│   ├── master/
+│   └── slave/
+│
+├── hardware/
+│   └── esp32_setup/
+│
+├── tests/
+│   └── test_cases.cpp
+│
+└── results/
+```
+
+---
+
+## 🛠️ Technical Stack
+
+* Language: C++
+* Hardware: ESP32
+* Communication: WebSockets
+
+---
+
+## 📅 Milestone 1 Timeline (Deadline: 26 March)
+
+### Phase 1 (March 18–19)
+
+* Hamza: Basic cuckoo filter (insert + lookup)
+* Kabeer: Simple WebSocket send/receive
+* Waiz: ESP32 setup + WiFi connectivity
+* Ayesha: Repository setup + master node skeleton
+
+### Phase 2 (March 20–22)
+
+* Integration begins
+* Master node sends requests
+* Slave nodes respond
+
+### Phase 3 (March 23–24)
+
+* Testing and debugging
+* Validate correctness
+
+### Phase 4 (March 25)
+
+* Documentation
+* Final cleanup
+
+### Final Submission (March 26)
+
+---
+
+## 📡 Communication Protocol (Initial Plan)
+
+### Message Format (JSON-like)
+
+```
+{
+  "type": "INSERT",
+  "value": 123
+}
+```
+
+Types:
+
+* INSERT
+* LOOKUP
+* DELETE
+* RESPONSE
+
+---
+
+## 🧪 Testing Plan
+
+* Unit testing for cuckoo filter
+* Communication testing (message send/receive)
+* Measure false positive rate
+
+---
+
+## 📌 Rules
+
+* All work must be pushed to GitHub daily
+* Use clear commit messages
+* No last-day submissions
+
+---
+
+## 🚀 Immediate Tasks
+
+### Ayesha
+
+* Set up repository
+* Create master node skeleton
+
+### Hamza
+
+* Implement insert() and lookup()
+
+### Kabeer
+
+* Send a test WebSocket message between two nodes
+
+### Waiz
+
+* Connect ESP32 to WiFi and verify connectivity
+
+---
+
+## 📞 Meeting Plan
+
+* Daily 10-minute check-ins
+* Progress updates required from each member
+
+---
+
+## ✅ Definition of Done (Milestone 1)
+
+* Cuckoo filter working on single node
+* Basic WebSocket communication working
+* Master can send request and receive response
+* Results documented
+
+---
+
+## 📊 Future Work
+
+* Distributed cuckoo filter
+* Partitioning across nodes
+* Performance optimization
+
+---
+
+**Team Lead:** Ayesha Kashif
