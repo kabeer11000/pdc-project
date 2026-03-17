@@ -1,18 +1,18 @@
 # Distributed Cuckoo Filter System
 
-## 📌 Project Overview
+## Project Overview
 
 This project implements a distributed cuckoo filter system using ESP32 nodes and WebSocket communication. The system consists of a master node coordinating multiple slave nodes, each maintaining a portion of the cuckoo filter.
 
 ---
 
-## 🎯 Milestone 1 Goal
+## Milestone 1 Goal
 
 Implement a **single-node cuckoo filter** and establish **basic WebSocket communication** between nodes.
 
 ---
 
-## 👥 Team Responsibilities
+## Team Responsibilities
 
 ### Ayesha (Team Lead)
 
@@ -41,7 +41,7 @@ Implement a **single-node cuckoo filter** and establish **basic WebSocket commun
 
 ---
 
-## 🗂️ Repository Structure
+## Repository Structure
 
 ```
 /cuckoo-filter-project
@@ -67,7 +67,7 @@ Implement a **single-node cuckoo filter** and establish **basic WebSocket commun
 
 ---
 
-## 🛠️ Technical Stack
+## Technical Stack
 
 * Language: C++
 * Hardware: ESP32
@@ -75,27 +75,27 @@ Implement a **single-node cuckoo filter** and establish **basic WebSocket commun
 
 ---
 
-## 📅 Milestone 1 Timeline (Deadline: 26 March)
+## Milestone 1 Timeline (Deadline: 26 March)
 
-### Phase 1 (March 18–19)
+### March 18–19
 
 * Hamza: Basic cuckoo filter (insert + lookup)
 * Kabeer: Simple WebSocket send/receive
 * Waiz: ESP32 setup + WiFi connectivity
 * Ayesha: Repository setup + master node skeleton
 
-### Phase 2 (March 20–22)
+### March 20–22
 
 * Integration begins
 * Master node sends requests
 * Slave nodes respond
 
-### Phase 3 (March 23–24)
+### March 23–24
 
 * Testing and debugging
 * Validate correctness
 
-### Phase 4 (March 25)
+### March 25
 
 * Documentation
 * Final cleanup
@@ -104,7 +104,7 @@ Implement a **single-node cuckoo filter** and establish **basic WebSocket commun
 
 ---
 
-## 📡 Communication Protocol (Initial Plan)
+## Communication Protocol (Initial Plan)
 
 ### Message Format (JSON-like)
 
@@ -124,7 +124,7 @@ Types:
 
 ---
 
-## 🧪 Testing Plan
+## Testing Plan
 
 * Unit testing for cuckoo filter
 * Communication testing (message send/receive)
@@ -132,7 +132,7 @@ Types:
 
 ---
 
-## 📌 Rules
+## Rules
 
 * All work must be pushed to GitHub daily
 * Use clear commit messages
@@ -140,7 +140,7 @@ Types:
 
 ---
 
-## 🚀 Immediate Tasks
+## Immediate Tasks
 
 ### Ayesha
 
@@ -161,14 +161,13 @@ Types:
 
 ---
 
-## 📞 Meeting Plan
+## Meeting Plan
 
-* Daily 10-minute check-ins
-* Progress updates required from each member
+* Daily progress updates required from each member
 
 ---
 
-## ✅ Definition of Done (Milestone 1)
+## Definition of Done (Milestone 1)
 
 * Cuckoo filter working on single node
 * Basic WebSocket communication working
@@ -177,7 +176,7 @@ Types:
 
 ---
 
-## 📊 Future Work
+## Future Work
 
 * Distributed cuckoo filter
 * Partitioning across nodes
@@ -185,4 +184,4 @@ Types:
 
 ---
 
-**Team Lead:** Ayesha Kashif
+
