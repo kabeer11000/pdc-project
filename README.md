@@ -1,2 +1,2 @@
 # Distributed-Cuckoo-Filter-with-ESP32-WebSocket-Architecture
-This project focuses on the design and implementation of a distributed Cuckoo Filter across multiple ESP32 devices. A Cuckoo Filter is a type of probabilistic data structure which allows efficient membership testing with a low memory footprint.
+This project focuses on the design and implementation of a distributed Cuckoo Filter across multiple ESP32 devices. A Cuckoo Filter is a type of probabilistic data structure which allows efficient membership testing with a low memory footprint. In a distributed setting, each ESP32 node maintains a local partition of the filter, which allows the system to handle larger datasets than a single device could accommodate.
