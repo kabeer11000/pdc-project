@@ -39,6 +39,7 @@ public:
     bool sendInsert(const char* value);
     bool sendDelete(const char* value);
     bool sendLookup(const char* value);
+    bool sendResponse(const char* value, bool result);
     
     // Set callback for received messages
     void onMessage(MessageCallback cb);

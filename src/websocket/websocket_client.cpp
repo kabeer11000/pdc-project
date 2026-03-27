@@ -99,6 +99,13 @@ bool WebSocketClient::sendLookup(const char* value) {
     return sent;
 }
 
+bool WebSocketClient::sendResponse(const char* value, bool result) {
+    String msg = createMessage(MSG_RESPONSE, value, result);
+    bool sent = webSocket.sendTXT(msg);
+    Serial.printf("[WebSocket] Sent RESPONSE: %s -> %s (result=%d)\n", sent ? "OK" : "FAILED", value, result);
+    return sent;
+}
+
 void WebSocketClient::onMessage(MessageCallback cb) {
     callback = cb;
 }

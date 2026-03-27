@@ -31,6 +31,7 @@ public:
     
     // Send to specific client
     bool sendResponse(uint8_t num, MessageType type, const char* value, bool result);
+    bool sendTXT(uint8_t num, String& txt);
     bool broadcast(const char* message);
     
     // Set callback for received messages

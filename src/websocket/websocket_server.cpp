@@ -68,6 +68,12 @@ bool WebSocketServer::sendResponse(uint8_t num, MessageType type, const char* va
     return sent;
 }
 
+bool WebSocketServer::sendTXT(uint8_t num, String& txt) {
+    bool sent = webSocket.sendTXT(num, txt);
+    Serial.printf("[WebSocket] Sent TXT to %u: %s\n", num, sent ? "OK" : "FAILED");
+    return sent;
+}
+
 bool WebSocketServer::broadcast(const char* message) {
     bool sent = webSocket.broadcastTXT(message);
     Serial.printf("[WebSocket] Broadcast: %s\n", sent ? "OK" : "FAILED");

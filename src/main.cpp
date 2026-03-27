@@ -28,18 +28,24 @@ void onWebSocketMessage(MessageType type, const char* value, bool result) {
         case MSG_INSERT: {
             bool success = filterInsert(&filter, value);
             Serial.printf("[Cuckoo] INSERT %s -> %s\n", value, success ? "OK" : "FAILED");
+            // Send response back to master
+            wsClient.sendResponse(value, success);
             break;
         }
         
         case MSG_DELETE: {
             bool success = filterDelete(&filter, value);
             Serial.printf("[Cuckoo] DELETE %s -> %s\n", value, success ? "OK" : "NOT FOUND");
+            // Send response back to master
+            wsClient.sendResponse(value, success);
             break;
         }
         
         case MSG_LOOKUP: {
             bool found = filterLookup(&filter, value);
             Serial.printf("[Cuckoo] LOOKUP %s -> %s\n", value, found ? "FOUND" : "NOT FOUND");
+            // Send response back to master
+            wsClient.sendResponse(value, found);
             break;
         }
         
