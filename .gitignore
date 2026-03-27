@@ -1,0 +1,20 @@
+# PlatformIO build artifacts
+.pio/
+.piolibdeps/
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test/Results
+results/*.log
+results/*.txt
+!results/placeholder.txt
+
+# Documentation exports
+qwen-code-export-*.md

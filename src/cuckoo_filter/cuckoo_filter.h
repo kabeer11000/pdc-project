@@ -33,3 +33,10 @@ struct FilterMessage {
     uint8_t nodeId;
     bool    result;     // used in LOOKUP response from slave → master
 };
+
+// ─── Function Declarations ────────────────────────────────────────────────────
+void filterInit(CuckooFilter* cf);
+bool filterInsert(CuckooFilter* cf, const char* item);
+bool filterLookup(const CuckooFilter* cf, const char* item);
+bool filterDelete(CuckooFilter* cf, const char* item);
+void runTestHarness(CuckooFilter* cf);
