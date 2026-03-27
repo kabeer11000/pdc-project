@@ -14,7 +14,7 @@ enum MessageType {
 };
 
 // Callback function type for received messages
-typedef void (*MessageCallback)(uint8_t num, MessageType type, const char* value);
+typedef void (*MessageCallback)(uint8_t num, MessageType type, const char* value, bool result);
 
 class WebSocketServer {
 private:

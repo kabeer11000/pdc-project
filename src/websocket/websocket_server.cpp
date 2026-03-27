@@ -35,15 +35,16 @@ void WebSocketServer::handleEvent(uint8_t num, WStype_t type, uint8_t * payload,
             if (!error && callback) {
                 const char* type = doc["type"];
                 const char* value = doc["value"];
-                
+                bool result = doc["result"] | false;  // Extract result field
+
                 MessageType msgType;
                 if (strcmp(type, "INSERT") == 0) msgType = MSG_INSERT;
                 else if (strcmp(type, "DELETE") == 0) msgType = MSG_DELETE;
                 else if (strcmp(type, "LOOKUP") == 0) msgType = MSG_LOOKUP;
                 else if (strcmp(type, "RESPONSE") == 0) msgType = MSG_RESPONSE;
                 else return;
-                
-                callback(num, msgType, value);
+
+                callback(num, msgType, value, result);  // Pass result to callback
             }
             break;
         }

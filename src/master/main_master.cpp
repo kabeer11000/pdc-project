@@ -35,6 +35,12 @@ uint8_t slaveCount = 0;
 // Node ID for master
 const uint8_t MASTER_NODE_ID = 0;
 
+// Response tracking for synchronous operations
+volatile bool responseReceived = false;
+volatile bool lastOperationResult = false;
+volatile MessageType lastResponseType = MSG_RESPONSE;
+char lastResponseValue[32] = "";
+
 // Function prototypes
 void onSlaveMessage(uint8_t num, MessageType type, const char* value);
 void broadcastToSlaves(const char* message);
@@ -44,8 +50,8 @@ void printConnectedSlaves();
 /**
  * Callback when a slave node sends a message
  */
-void onSlaveMessage(uint8_t num, MessageType type, const char* value) {
-    Serial.printf("[Master] Slave %d sent: type=%d, value=%s\n", num, type, value);
+void onSlaveMessage(uint8_t num, MessageType type, const char* value, bool result) {
+    Serial.printf("[Master] Slave %d sent: type=%d, value=%s, result=%d\n", num, type, value, result);
     
     switch (type) {
         case MSG_INSERT: {
@@ -77,10 +83,18 @@ void onSlaveMessage(uint8_t num, MessageType type, const char* value) {
             break;
         }
         
-        case MSG_RESPONSE:
-            // Slave responded to our command (handled elsewhere)
-            Serial.printf("[Master] Received RESPONSE from slave %d\n", num);
+        case MSG_RESPONSE: {
+            // Slave responded to our command - capture for synchronous wait
+            Serial.printf("[Master] RESPONSE from slave %d: %s = %d\n", num, value, result);
+            
+            // Store response for synchronous functions
+            responseReceived = true;
+            lastOperationResult = result;  // Store the actual result from slave
+            lastResponseType = MSG_RESPONSE;
+            strncpy(lastResponseValue, value, sizeof(lastResponseValue) - 1);
+            lastResponseValue[sizeof(lastResponseValue) - 1] = '\0';
             break;
+        }
     }
 }
 
@@ -164,53 +178,120 @@ bool sendToSlave(uint8_t slaveIndex, MessageType type, const char* value) {
 
 /**
  * Insert item into distributed filter
+ * Waits for slave response (up to 5 seconds)
  */
 bool distributedInsert(const char* item) {
     uint8_t slaveIdx = getSlaveForItem(item);
-    
+
     if (slaveIdx == 255) {
         // No slaves, insert locally
         bool success = filterInsert(&masterFilter, item);
         Serial.printf("[Master] No slaves, local INSERT %s -> %s\n", item, success ? "OK" : "FAILED");
         return success;
     }
+
+    // Reset response flag and send command
+    responseReceived = false;
+    lastOperationResult = false;
     
-    // Send to appropriate slave
-    return sendToSlave(slaveIdx, MSG_INSERT, item);
+    if (!sendToSlave(slaveIdx, MSG_INSERT, item)) {
+        Serial.printf("[Master] Failed to send INSERT to slave %d\n", slaveIdx);
+        return false;
+    }
+    
+    // Wait for response (timeout 5 seconds)
+    unsigned long start = millis();
+    while (!responseReceived && (millis() - start < 5000)) {
+        wsServer.loop();
+        delay(10);
+    }
+    
+    if (!responseReceived) {
+        Serial.printf("[Master] Timeout waiting for INSERT response\n");
+        return false;
+    }
+    
+    Serial.printf("[Master] INSERT confirmed by slave (result=%d)\n", lastOperationResult);
+    return lastOperationResult;  // Return actual result from slave
 }
 
 /**
  * Lookup item in distributed filter
+ * Waits for slave response (up to 5 seconds)
+ * Note: For proper implementation, slave should include result in RESPONSE
  */
 bool distributedLookup(const char* item) {
     uint8_t slaveIdx = getSlaveForItem(item);
-    
+
     if (slaveIdx == 255) {
         // No slaves, check locally
         bool found = filterLookup(&masterFilter, item);
         Serial.printf("[Master] No slaves, local LOOKUP %s -> %s\n", item, found ? "FOUND" : "NOT FOUND");
         return found;
     }
+
+    // Reset response flag and send command
+    responseReceived = false;
+    lastOperationResult = false;
     
-    // Send to appropriate slave
-    return sendToSlave(slaveIdx, MSG_LOOKUP, item);
+    if (!sendToSlave(slaveIdx, MSG_LOOKUP, item)) {
+        Serial.printf("[Master] Failed to send LOOKUP to slave %d\n", slaveIdx);
+        return false;
+    }
+    
+    // Wait for response (timeout 5 seconds)
+    unsigned long start = millis();
+    while (!responseReceived && (millis() - start < 5000)) {
+        wsServer.loop();
+        delay(10);
+    }
+    
+    if (!responseReceived) {
+        Serial.printf("[Master] Timeout waiting for LOOKUP response\n");
+        return false;
+    }
+    
+    Serial.printf("[Master] LOOKUP response received\n");
+    return lastOperationResult;  // Actual lookup result from slave
 }
 
 /**
  * Delete item from distributed filter
+ * Waits for slave response (up to 5 seconds)
  */
 bool distributedDelete(const char* item) {
     uint8_t slaveIdx = getSlaveForItem(item);
-    
+
     if (slaveIdx == 255) {
         // No slaves, delete locally
         bool deleted = filterDelete(&masterFilter, item);
         Serial.printf("[Master] No slaves, local DELETE %s -> %s\n", item, deleted ? "OK" : "NOT FOUND");
         return deleted;
     }
+
+    // Reset response flag and send command
+    responseReceived = false;
+    lastOperationResult = false;
     
-    // Send to appropriate slave
-    return sendToSlave(slaveIdx, MSG_DELETE, item);
+    if (!sendToSlave(slaveIdx, MSG_DELETE, item)) {
+        Serial.printf("[Master] Failed to send DELETE to slave %d\n", slaveIdx);
+        return false;
+    }
+    
+    // Wait for response (timeout 5 seconds)
+    unsigned long start = millis();
+    while (!responseReceived && (millis() - start < 5000)) {
+        wsServer.loop();
+        delay(10);
+    }
+    
+    if (!responseReceived) {
+        Serial.printf("[Master] Timeout waiting for DELETE response\n");
+        return false;
+    }
+    
+    Serial.printf("[Master] DELETE confirmed by slave (result=%d)\n", lastOperationResult);
+    return lastOperationResult;  // Return actual result from slave
 }
 
 void setup() {
